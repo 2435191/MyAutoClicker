@@ -12,12 +12,14 @@ class AutoClicker(rumps.App):
         self.click_timer = rumps.Timer(lambda _ : self.mouse.click(mouse.Button.left), 1/self.cps_value)
 
         def timer_start(_):
-            print(rumps.timers())
+            #print(rumps.timers())
             self.click_timer.start()
 
         self.menu = [
             rumps.MenuItem("Start", timer_start),
+            None,
             "Stop key: esc",
+            "Start key: \\",
             None,
             "cps_value",
             rumps.SliderMenuItem(dimensions=(180,15), callback=self.change_cps, min_value = -1, max_value=5, value=default_value),
@@ -51,9 +53,11 @@ class AutoClicker(rumps.App):
     def check_keys(self):
         def on_press(key):
             if key == keyboard.Key.esc:
-                print("stop")
+                #print("stop")
                 for t in rumps.timers(): # just in case things get out of sync
                     t.stop()
+            if key == keyboard.KeyCode(char='\\'):
+                self.click_timer.start()
                 
 
         self.listener = keyboard.Listener(
